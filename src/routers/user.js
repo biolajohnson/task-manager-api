@@ -68,10 +68,11 @@ router.patch('/users/me', auth,  async(req, res) => {
     try{
     updates.forEach((update) => req.user[update] = req.body[update])
  
-        await req.user.save()
+        
        if(!req.user){
            return res.status(404).send()
        }
+       await req.user.save()
        res.send(req.user)
     }catch(e){
         res.status(500).send()
@@ -79,7 +80,7 @@ router.patch('/users/me', auth,  async(req, res) => {
 })
 router.delete('/users/me', auth, async (req, res) => {
     try{
-       req.user.remove()
+       await req.user.remove()
         sendCancelationEmail(req.user.email, req.user.name)
         res.send(req.user)
     } catch(e){
